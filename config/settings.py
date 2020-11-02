@@ -56,6 +56,17 @@ INSTALLED_APPS = [
     'accounts.apps.AccountsConfig'
 ]
 
+REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES': [
+        #'rest_framework.permissions.AllowAny',
+        'rest_framework.permissions.IsAuthenticated',
+    ],
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.SessionAuthentication',
+        'rest_framework.authentication.TokenAuthentication',
+    ]
+}
+
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
@@ -152,4 +163,6 @@ REST_AUTH_SERIALIZERS = {
     'TOKEN_SERIALIZER': 'accounts.serializers.TokenSerializer',
 }
 
+SITE_ID=1
 AUTH_USER_MODEL = 'accounts.User'
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'

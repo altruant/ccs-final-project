@@ -9,6 +9,7 @@ class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ('id', 'username', 'email',)
+
 class TokenSerializer(serializers.ModelSerializer):
     user = UserSerializer()
     class Meta:
