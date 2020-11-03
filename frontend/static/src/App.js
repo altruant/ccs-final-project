@@ -14,6 +14,32 @@ import RegisterForm from './Components/RegisterForm.js';
 import Cookies from 'js-cookie';
 
 class App extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      isLoggedIn: false
+    }
+
+    this.logIn=this.logIn.bind(this)
+    this.logOut=this.logOut.bind(this)
+    this.handleRegister=this.handleRegister.bind(this)
+  }
+
+  async logOut() {
+    const response = await fetch('/accounts/rest-auth/logout/', {
+      method: 'POST',
+      headers: {
+        'X-CSRFToken': Cookies.get('csrftoken'),
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(Cookies.get('Authorization'))
+    });
+
+    const data = await response.json();
+    Cookies.remove('Authorization')
+    this.setState({isLoggedIn: false})
+  }
 
   async logIn(event, info) {
     event.preventDefault();
@@ -28,6 +54,7 @@ class App extends React.Component {
 
     const data = await response.json();
     Cookies.set('Authorization', `Token ${data.key}`)
+    this.setState({isLoggedIn: true})
   }
 
   async handleRegister(e, info) {
@@ -44,19 +71,24 @@ class App extends React.Component {
     const data = await response.json();
     console.log(data)
     Cookies.set('Authorization', `Token ${data.key}`)
+    this.setState({isLoggedIn: true})
 
   }
 
   render() {
+    let logConditional
+    if(this.state.isLoggedIn===true){
+      logConditional = <Link onClick={this.logOut} to='/'>Logout</Link>
+    } else {
+      logConditional = <Link to='/login'>Login</Link>
+    }
     return(
       <Router>
         <Navbar>
           <Link to='/register'>
             Register
           </Link>
-          <Link to='/login'>
-            Login
-          </Link>
+          {logConditional}
 
         </Navbar>
         <Switch>
