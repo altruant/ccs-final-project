@@ -9,8 +9,8 @@ import {
   Navbar,
 } from 'react-bootstrap';
 import './App.css';
-import LoginForm from './Components/LoginForm.js';
-import RegisterForm from './Components/RegisterForm.js';
+import LoginForm from './components/LoginForm.js';
+import RegisterForm from './components/RegisterForm.js';
 import Cookies from 'js-cookie';
 
 class App extends React.Component {
