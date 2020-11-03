@@ -1,5 +1,4 @@
 import React from 'react';
-import Cookies from 'js-cookie';
 
 class RegisterForm extends React.Component {
   constructor(props) {
