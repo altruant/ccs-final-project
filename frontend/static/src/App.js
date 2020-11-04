@@ -1,14 +1,17 @@
 import React from "react";
 import {
-  BrowserRouter as Router,
   Switch,
   Route,
-  Link
+  Link,
+  withRouter
 } from "react-router-dom";
 import {
   Navbar,
 } from 'react-bootstrap';
 import './App.css';
+import 'bootstrap/dist/css/bootstrap.min.css';
+
+import LinkForm from './components/LinkForm.js'
 import LoginForm from './components/LoginForm.js';
 import RegisterForm from './components/RegisterForm.js';
 import Cookies from 'js-cookie';
@@ -18,7 +21,7 @@ class App extends React.Component {
     super(props);
 
     this.state = {
-      isLoggedIn: false
+      isLoggedIn: true
     }
 
     this.logIn=this.logIn.bind(this)
@@ -53,8 +56,10 @@ class App extends React.Component {
     });
 
     const data = await response.json();
+    console.log('Response', data)
     Cookies.set('Authorization', `Token ${data.key}`)
     this.setState({isLoggedIn: true})
+    this.props.history.push('/')
   }
 
   async handleRegister(e, info) {
@@ -69,10 +74,10 @@ class App extends React.Component {
     });
 
     const data = await response.json();
-    console.log(data)
+    console.log('Response', data)
     Cookies.set('Authorization', `Token ${data.key}`)
     this.setState({isLoggedIn: true})
-
+    this.props.history.push('/')
   }
 
   render() {
@@ -80,29 +85,44 @@ class App extends React.Component {
     if(this.state.isLoggedIn===true){
       logConditional = <Link onClick={this.logOut} to='/'>Logout</Link>
     } else {
-      logConditional = <Link to='/login'>Login</Link>
+      logConditional =
+      <>
+        <Link to='/register-form'>
+          Register
+        </Link>
+        <Link to='/login-form'>
+          Login
+        </Link>
+      </>
+
+
     }
     return(
-      <Router>
+      <React.Fragment>
         <Navbar>
-          <Link to='/register'>
-            Register
+          <Link to='/'>
+            Home
           </Link>
-          {logConditional}
-
+          <div className="user">
+            {logConditional}
+          </div>
         </Navbar>
         <Switch>
-          <Route path='/register'>
+          <Route path='/register-form'>
             <RegisterForm handleRegister={this.handleRegister}/>
           </Route>
-          <Route path='/login'>
+          <Route path='/login-form'>
             <LoginForm logIn={this.logIn}/>
           </Route>
+          <Route path='/'>
+            <LinkForm isLoggedIn={this.state.isLoggedIn}/>
+          </Route>
         </Switch>
-      </Router>
+      </React.Fragment>
+
     )
   }
 }
 
 
-export default App;
+export default withRouter(App);
