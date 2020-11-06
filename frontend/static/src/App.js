@@ -21,7 +21,8 @@ class App extends React.Component {
     super(props);
 
     this.state = {
-      isLoggedIn: true
+      isLoggedIn: false
+
     }
 
     this.logIn=this.logIn.bind(this)
@@ -40,7 +41,9 @@ class App extends React.Component {
     });
 
     const data = await response.json();
+    console.log('Response', data)
     Cookies.remove('Authorization')
+    localStorage.removeItem('login')
     this.setState({isLoggedIn: false})
   }
 
@@ -58,7 +61,7 @@ class App extends React.Component {
     const data = await response.json();
     console.log('Response', data)
     Cookies.set('Authorization', `Token ${data.key}`)
-    this.setState({isLoggedIn: true})
+    localStorage.setItem('login', data.key)
     this.props.history.push('/')
   }
 
@@ -76,15 +79,13 @@ class App extends React.Component {
     const data = await response.json();
     console.log('Response', data)
     Cookies.set('Authorization', `Token ${data.key}`)
-    this.setState({isLoggedIn: true})
+    localStorage.setItem('login', data.key)
     this.props.history.push('/')
   }
 
   render() {
     let logConditional
-    if(this.state.isLoggedIn===true){
-      logConditional = <Link onClick={this.logOut} to='/'>Logout</Link>
-    } else {
+    if(localStorage.getItem('login')===null) {
       logConditional =
       <>
         <Link to='/register-form'>
@@ -94,14 +95,17 @@ class App extends React.Component {
           Login
         </Link>
       </>
-
-
+    } else {
+      logConditional = <Link onClick={this.logOut} to='/'>Logout</Link>
     }
     return(
       <React.Fragment>
         <Navbar>
           <Link to='/'>
             Home
+          </Link>
+          <Link to='/create'>
+            Create
           </Link>
           <div className="user">
             {logConditional}
@@ -114,8 +118,8 @@ class App extends React.Component {
           <Route path='/login-form'>
             <LoginForm logIn={this.logIn}/>
           </Route>
-          <Route path='/'>
-            <LinkForm isLoggedIn={this.state.isLoggedIn}/>
+          <Route path='/create'>
+            <LinkForm />
           </Route>
         </Switch>
       </React.Fragment>
