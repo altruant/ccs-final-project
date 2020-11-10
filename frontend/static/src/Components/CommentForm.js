@@ -1,12 +1,10 @@
 import React from 'react'
-import TimeField from 'react-simple-timefield';
 
 class CommentForm extends React.Component {
   constructor(props) {
     super(props);
 
     this.state= {
-      timestamp: '00:00:00',
       body: '',
     }
     this.handleInput = this.handleInput.bind(this);
@@ -17,21 +15,17 @@ class CommentForm extends React.Component {
     this.setState({[event.target.name]: event.target.value})
   }
 
+
+
   addComment() {
-    this.props.addComment(this.state);
-    this.setState({timestamp: '00:00:00', body: ''});
+    this.props.addComment({timestamp: this.props.timestamp, parsedStamp: this.props.parsedStamp, body: this.state.body});
+    this.setState({body: ''});
   }
 
   render() {
     return(
       <div className={this.props.className}>
-        <TimeField
-          value={this.state.timestamp}
-          onChange={this.handleInput}
-          input={<input type="text" name='timestamp'/>}
-          colon=':'
-          showSeconds
-        />
+        <span>{this.props.parsedStamp}</span>
         <input type="text" name='body' value={this.state.body} onChange={this.handleInput}/>
         <button type="button" onClick={this.addComment}>Add Comment</button>
       </div>

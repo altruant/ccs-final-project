@@ -44,6 +44,7 @@ class App extends React.Component {
     console.log('Response', data)
     Cookies.remove('Authorization')
     localStorage.removeItem('login')
+    localStorage.removeItem('username')
     this.setState({isLoggedIn: false})
   }
 
@@ -61,7 +62,8 @@ class App extends React.Component {
     const data = await response.json();
     console.log('Response', data)
     Cookies.set('Authorization', `Token ${data.key}`)
-    localStorage.setItem('login', data.key)
+    localStorage.setItem('login', `${data.key}`)
+    localStorage.setItem('username', `${data.user.username}`)
     this.props.history.push('/')
   }
 
@@ -80,6 +82,7 @@ class App extends React.Component {
     console.log('Response', data)
     Cookies.set('Authorization', `Token ${data.key}`)
     localStorage.setItem('login', data.key)
+    localStorage.setItem('username', `${data.user.username}`)
     this.props.history.push('/')
   }
 
