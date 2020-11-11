@@ -11,6 +11,7 @@ import {
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
+import LinkList from './components/LinkList.js'
 import LinkForm from './components/LinkForm.js'
 import LoginForm from './components/LoginForm.js';
 import RegisterForm from './components/RegisterForm.js';
@@ -28,6 +29,7 @@ class App extends React.Component {
     this.logIn=this.logIn.bind(this)
     this.logOut=this.logOut.bind(this)
     this.handleRegister=this.handleRegister.bind(this)
+    this.submitLink=this.submitLink.bind(this)
   }
 
   async logOut() {
@@ -86,9 +88,25 @@ class App extends React.Component {
     this.props.history.push('/')
   }
 
+  async submitLink(event, info) {
+    event.preventDefault()
+    const response = await fetch('/api/links/', {
+      method: 'POST',
+      headers: {
+        'X-CSRFToken': Cookies.get('csrftoken'),
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(info)
+    })
+    const data = await response.json()
+    this.props.history.push(`/links/${localStorage.getItem('username')}/your-links/${data.id}`)
+    console.log('Response', data)
+  }
   render() {
     let logConditional
+    let yourLinks
     if(localStorage.getItem('login')===null) {
+      yourLinks = <></>
       logConditional =
       <>
         <Link to='/register-form'>
@@ -99,6 +117,11 @@ class App extends React.Component {
         </Link>
       </>
     } else {
+      yourLinks=<>
+      <Link to={`/${localStorage.getItem('username')}/your-links`}>
+        Your Links
+      </Link>
+      </>
       logConditional = <Link onClick={this.logOut} to='/'>Logout</Link>
     }
     return(
@@ -110,7 +133,9 @@ class App extends React.Component {
           <Link to='/create'>
             Create
           </Link>
+
           <div className="user">
+            {yourLinks}
             {logConditional}
           </div>
         </Navbar>
@@ -122,7 +147,10 @@ class App extends React.Component {
             <LoginForm logIn={this.logIn}/>
           </Route>
           <Route path='/create'>
-            <LinkForm />
+            <LinkForm submitLink={this.submitLink}/>
+          </Route>
+          <Route path={`/${localStorage.getItem('username')}/your-links`}>
+            <LinkList />
           </Route>
         </Switch>
       </React.Fragment>

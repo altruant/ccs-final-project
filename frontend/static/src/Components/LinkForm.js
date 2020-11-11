@@ -1,5 +1,4 @@
 import React from 'react';
-import Cookies from 'js-cookie'
 import Youtube from 'react-youtube';
 import CommentForm from './CommentForm.js';
 
@@ -23,7 +22,6 @@ class LinkForm extends React.Component {
     }
     this.handleInput=this.handleInput.bind(this);
     this.addComment = this.addComment.bind(this);
-    this.submitLink=this.submitLink.bind(this);
     this.showForm=this.showForm.bind(this);
     this.removeComment=this.removeComment.bind(this);
     this.getTimestamp=this.getTimestamp.bind(this);
@@ -81,20 +79,6 @@ class LinkForm extends React.Component {
     this.setState({[event.target.name]: event.target.value})
   }
 
-  async submitLink(event) {
-    event.preventDefault()
-    const response = await fetch('/api/links/', {
-      method: 'POST',
-      headers: {
-        'X-CSRFToken': Cookies.get('csrftoken'),
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(this.state)
-    })
-    const data = await response.json()
-    console.log('Response', data)
-  }
-
   render() {
 
     let formConditional
@@ -121,7 +105,7 @@ class LinkForm extends React.Component {
             <h3>{`${this.state.title}//${localStorage.getItem('username')}`}</h3>
             <button onClick={this.toggleTitle}>Edit</button>
           </div>
-          <form onSubmit={this.submitLink}>
+          <form onSubmit={(event) => this.props.submitLink(event, this.state)}>
             <div className={`url-title ${this.state.isEditing ? '': 'hidden'}`}>
               <input type="url" name='youtube_url' onChange={this.handleInput} value={this.state.youtube_url} placeholder='Youtube URL'/>
               <input type="text" name='title' onChange={this.handleInput} value={this.state.title} placeholder='Title'/>

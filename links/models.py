@@ -17,7 +17,7 @@ class Comment(models.Model):
     link=models.ForeignKey(Link, on_delete=models.CASCADE, related_name='comments')
     body=models.TextField()
     timestamp=models.CharField(max_length=20, default='0')
-    pasedStamp=models.CharField(max_length=20, default='0s')
+    parsedStamp=models.CharField(max_length=20, default='0s')
 
     def __str__(self):
         return self.body
