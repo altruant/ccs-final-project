@@ -68,13 +68,13 @@ class LinkForm extends React.Component {
     comments.push(comment);
     this.setState({comments});
   }
+
   removeComment(index) {
     const comments = [...this.state.comments];
     comments.splice(index, 1);
     this.setState({comments});
-
-
   }
+
   handleInput(event) {
     this.setState({[event.target.name]: event.target.value})
   }

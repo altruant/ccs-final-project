@@ -11,6 +11,8 @@ import {
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
+import LinkDetail from './components/LinkDetail.js'
+
 import LinkList from './components/LinkList.js'
 import LinkForm from './components/LinkForm.js'
 import LoginForm from './components/LoginForm.js';
@@ -22,15 +24,20 @@ class App extends React.Component {
     super(props);
 
     this.state = {
-      isLoggedIn: false
-
+      isLoggedIn: false,
+      // activeLink: {}
     }
 
     this.logIn=this.logIn.bind(this)
     this.logOut=this.logOut.bind(this)
     this.handleRegister=this.handleRegister.bind(this)
     this.submitLink=this.submitLink.bind(this)
+    // this.setActiveLink=this.setActiveLink.bind(this)
   }
+
+  // setActiveLink(info) {
+  //   this.setState({activeLink: info})
+  // }
 
   async logOut() {
     const response = await fetch('/accounts/rest-auth/logout/', {
@@ -149,9 +156,10 @@ class App extends React.Component {
           <Route path='/create'>
             <LinkForm submitLink={this.submitLink}/>
           </Route>
-          <Route path={`/${localStorage.getItem('username')}/your-links`}>
-            <LinkList />
-          </Route>
+
+          <Route path={`/${localStorage.getItem('username')}/your-links/:id`} exact component={LinkDetail} />
+          <Route path={`/${localStorage.getItem('username')}/your-links`} component={LinkList} />
+
         </Switch>
       </React.Fragment>
 
