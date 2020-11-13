@@ -157,7 +157,7 @@ class App extends React.Component {
             <LinkForm submitLink={this.submitLink}/>
           </Route>
 
-          <Route path={`/${localStorage.getItem('username')}/your-links/:id`} exact component={LinkDetail} />
+          <Route path={`/${localStorage.getItem('username')}/:id`} exact component={LinkDetail} />
           <Route path={`/${localStorage.getItem('username')}/your-links`} component={LinkList} />
 
         </Switch>

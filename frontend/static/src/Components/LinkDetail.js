@@ -59,6 +59,7 @@ class LinkDetail extends React.Component {
     })
       .then(response => response.json())
       .then(data => console.log(data))
+      .then(this.setState({isEditing: !this.state.isEditing}))
   }
 
   getTimestamp(event) {
