@@ -1,37 +1,55 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import {
   Link,
   // Route,
   // useRouteMatch
 } from 'react-router-dom';
-
+import Cookies from 'js-cookie';
 // import LinkDetail from './LinkDetail.js'
 
-export default function LinkList(props) {
-  const [links, setLinks] = useState([])
 
-  useEffect(() => {
-      fetch('/api/links/')
-        .then(results => results.json())
-        .then(data => setLinks(data));
-    }, []);
-  //
-  // const { url, path } = useRouteMatch()
+class LinkList extends React.Component {
+  constructor(props) {
+    super(props);
 
-  return(
-    <div>
-      {links.map((link, index) => (
-        <div key={index}>
-          <Link to={`${props.match.url}/${link.id}`}>
-            <div className={`list-item-${index}`}>
-              <img src={`https://img.youtube.com/vi/${link.youtube_ID}/0.jpg`} alt="#"/>
-              {link.title}
-            </div>
-          </Link>
+    this.state = {
+      links: [],
+    }
+  }
 
-        </div>
-      ))}
+  async componentDidMount() {
 
-    </div>
-  )
+    const response = await fetch('/api/links/', {
+      method: 'GET',
+      headers: {
+        'X-CSRFToken': Cookies.get('csrftoken'),
+        'Content-Type': 'application/json',
+      },
+    })
+    const data = await response.json()
+    console.log('data', data)
+    this.setState({links: data})
+  }
+
+  render() {
+    console.log('render link list');
+    return(
+      <div>
+        {this.state.links.map((link, index) => (
+          <div key={index}>
+            <Link to={`/${this.props.username}/${link.id}`}>
+              <div className={`list-item-${index}`}>
+                <img src={`https://img.youtube.com/vi/${link.youtube_ID}/0.jpg`} alt="#"/>
+                {link.title}
+              </div>
+            </Link>
+
+          </div>
+        ))}
+
+      </div>
+    )
+  }
 }
+
+export default LinkList

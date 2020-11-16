@@ -9,15 +9,16 @@ class Link(models.Model):
     youtube_url=models.URLField(max_length=255)
     youtube_ID=models.CharField(max_length=255)
     pub_date=models.DateTimeField(auto_now=True)
+    comments=models.JSONField()
 
     def __str__(self):
         return self.title
 
-class Comment(models.Model):
-    link=models.ForeignKey(Link, on_delete=models.CASCADE, related_name='comments')
-    body=models.TextField()
-    timestamp=models.CharField(max_length=20, default='0')
-    parsedStamp=models.CharField(max_length=20, default='0s')
-
-    def __str__(self):
-        return self.body
+# class Comment(models.Model):
+#     link=models.ForeignKey(Link, on_delete=models.CASCADE, related_name='comments')
+#     body=models.TextField()
+#     timestamp=models.CharField(max_length=20, default='0')
+#     parsedStamp=models.CharField(max_length=20, default='0s')
+#
+#     def __str__(self):
+#         return self.body

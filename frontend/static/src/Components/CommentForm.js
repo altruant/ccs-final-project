@@ -26,8 +26,8 @@ class CommentForm extends React.Component {
     return(
       <div className={this.props.className}>
         <span>{this.props.parsedStamp}</span>
-        <input type="text" name='body' value={this.state.body} onChange={this.handleInput}/>
-        <button type="button" onClick={this.addComment}>Add Comment</button>
+        <textarea type="text" name='body' value={this.state.body} onChange={this.handleInput} placeholder='New Comment'/>
+        <button className={`button ${this.state.body ? '': 'hidden'}`} type="button" onClick={this.addComment}>Add Comment</button>
       </div>
     )
   }

@@ -1,3 +1,4 @@
+// imports
 import React from "react";
 import {
   Switch,
@@ -8,16 +9,18 @@ import {
 import {
   Navbar,
 } from 'react-bootstrap';
-import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
-
+import './App.css'
+import Cookies from 'js-cookie';
+//components
+import Wordmark_Color from './assets/Wordmark-Color.png'
+import Home from './components/Home.js'
 import LinkDetail from './components/LinkDetail.js'
-
 import LinkList from './components/LinkList.js'
 import LinkForm from './components/LinkForm.js'
 import LoginForm from './components/LoginForm.js';
 import RegisterForm from './components/RegisterForm.js';
-import Cookies from 'js-cookie';
+
 
 class App extends React.Component {
   constructor(props) {
@@ -25,19 +28,17 @@ class App extends React.Component {
 
     this.state = {
       isLoggedIn: false,
-      // activeLink: {}
     }
 
     this.logIn=this.logIn.bind(this)
     this.logOut=this.logOut.bind(this)
     this.handleRegister=this.handleRegister.bind(this)
     this.submitLink=this.submitLink.bind(this)
-    // this.setActiveLink=this.setActiveLink.bind(this)
   }
 
-  // setActiveLink(info) {
-  //   this.setState({activeLink: info})
-  // }
+  componentDidMount() {
+    this.setState({username: localStorage.getItem('username')})
+  }
 
   async logOut() {
     const response = await fetch('/accounts/rest-auth/logout/', {
@@ -97,18 +98,21 @@ class App extends React.Component {
 
   async submitLink(event, info) {
     event.preventDefault()
+    let newState = {...info}
+    delete newState.player
     const response = await fetch('/api/links/', {
       method: 'POST',
       headers: {
         'X-CSRFToken': Cookies.get('csrftoken'),
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(info)
+      body: JSON.stringify(newState)
     })
     const data = await response.json()
-    this.props.history.push(`/links/${localStorage.getItem('username')}/your-links/${data.id}`)
+    this.props.history.push(`/${this.state.username}/${data.id}`)
     console.log('Response', data)
   }
+
   render() {
     let logConditional
     let yourLinks
@@ -133,19 +137,23 @@ class App extends React.Component {
     }
     return(
       <React.Fragment>
-        <Navbar>
-          <Link to='/'>
-            Home
-          </Link>
-          <Link to='/create'>
-            Create
-          </Link>
+        <div className="nav-container">
+          <Navbar>
+            <div className="main">
+              <Link to='/'>
+                <img src={Wordmark_Color} alt="#"/>
+              </Link>
+              <Link to='/create'>
+                Create
+              </Link>
+              {yourLinks}
+            </div>
+            <div className="user">
+              {logConditional}
+            </div>
+          </Navbar>
+        </div>
 
-          <div className="user">
-            {yourLinks}
-            {logConditional}
-          </div>
-        </Navbar>
         <Switch>
           <Route path='/register-form'>
             <RegisterForm handleRegister={this.handleRegister}/>
@@ -156,10 +164,11 @@ class App extends React.Component {
           <Route path='/create'>
             <LinkForm submitLink={this.submitLink}/>
           </Route>
-
-          <Route path={`/${localStorage.getItem('username')}/:id`} exact component={LinkDetail} />
-          <Route path={`/${localStorage.getItem('username')}/your-links`} component={LinkList} />
-
+          <Route path={`/${this.state.username}/your-links`}>
+            <LinkList username={this.state.username} />
+          </Route>
+          <Route path={`/${this.state.username}/:id`} exact component={LinkDetail} />
+          <Route path='/' component={Home} />
         </Switch>
       </React.Fragment>
 

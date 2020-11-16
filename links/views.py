@@ -14,7 +14,15 @@ class LinkListView(generics.ListCreateAPIView):
         user=self.request.user
         return Link.objects.filter(user=user)
 
-
+# class CommentCreateView(generics.ListCreateAPIView):
+#     serializer_class= CommentSerializer
+#     permissions_classes=[permissions.IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly]
+#     queryset= Comment.objects.all()
+#
+# class CommentDetailView(generics.RetrieveUpdateDestroyAPIView):
+#     serializer_class= CommentSerializer
+#     permissions_classes=[permissions.IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly]
+#     queryset= Comment.objects.all()
 
 class LinkDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset= Link.objects.all()

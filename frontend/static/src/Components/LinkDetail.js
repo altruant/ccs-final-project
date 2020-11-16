@@ -30,6 +30,7 @@ class LinkDetail extends React.Component {
     this.removeComment=this.removeComment.bind(this);
     this.edit=this.edit.bind(this)
     this.updateLink=this.updateLink.bind(this)
+    this.deleteMethod=this.deleteMethod.bind(this)
   }
 
 
@@ -40,26 +41,43 @@ class LinkDetail extends React.Component {
       .then(data => this.setState({...data}))
   }
 
-  updateLink(event) {
+  async updateLink(event) {
     event.preventDefault();
-    // console.log(this.state);
+
     // create a shallow copy of state object
     // remove property of player
     let newState = {...this.state}
-
     delete newState.player
-    // console.log(newState)
-    fetch(`/api/links/${this.props.match.params.id}/`, {
-      method: 'PUT',
+    console.log(newState)
+
+    const response = await fetch(`/api/links/${this.props.match.params.id}/`, {
+      method: 'PATCH',
       headers: {
         'X-CSRFToken': Cookies.get('csrftoken'),
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(newState)
+      body: JSON.stringify(JSON.parse(JSON.stringify(newState)))
     })
-      .then(response => response.json())
-      .then(data => console.log(data))
-      .then(this.setState({isEditing: !this.state.isEditing}))
+    const data = await response.json()
+    console.log(data)
+    this.setState({isEditing: !this.state.isEditing})
+  }
+
+  deleteMethod() {
+    fetch(`/api/links/${this.props.match.params.id}/`, {
+      method: 'DELETE',
+      headers: {
+        'X-CSRFToken': Cookies.get('csrftoken'),
+        'Content-Type': 'application/json',
+      },
+    })
+      .then(response => {
+        // response.json()
+        this.props.history.push(`/${localStorage.getItem('username')}/your-links`);
+      })
+      // .then(data => console.log(data))
+      .catch(err => console.log('ERR', err))
+
   }
 
   getTimestamp(event) {
@@ -132,7 +150,7 @@ class LinkDetail extends React.Component {
           <div className="title">
             <h3>{`${this.state.title}//${localStorage.getItem('username')}`}</h3>
             <Icon onClick={this.edit} icon={edit2Fill} />
-            <Icon icon={trashFill} />
+            <Icon onClick={this.deleteMethod} icon={trashFill} />
           </div>
           {this.state.comments.map((comment, index) => (
             <div key={index}>
@@ -147,7 +165,7 @@ class LinkDetail extends React.Component {
           <form onSubmit={this.updateLink}>
             <div className='url-title'>
               <input type='url' value={this.state.youtube_url} onChange={this.handleInput} name='youtube_url' placeholder='Youtube URL'/>
-              <input type="text" value={this.state.title} name='title' placeholder='Title'/>
+              <input type="text" value={this.state.title} onChange={this.handleInput} name='title' placeholder='Title'/>
               <button type='button' onClick={() => this.getIDFomURL()}>Update Youtube URL</button>
             </div>
             <div className="comments">
@@ -156,7 +174,7 @@ class LinkDetail extends React.Component {
                     <div key={index}>
                       <span>{comment.parsedStamp}</span>
                       <input type="text" name='body' onChange={(e) => this.handleSubInput(e, index)} value={comment.body}/>
-                      <button type='button' onClick={() => this.removeComment()}>Remove</button>
+                      <button type='button' onClick={() => this.removeComment(index)}>Remove</button>
                     </div>
                 ))
               }
