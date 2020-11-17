@@ -10,7 +10,7 @@ import {
   Navbar,
 } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import './App.css'
+import './css/App.css'
 import Cookies from 'js-cookie';
 //components
 import Wordmark_Color from './assets/Wordmark-Color.png'
@@ -130,14 +130,14 @@ class App extends React.Component {
     } else {
       yourLinks=<>
       <Link to={`/${localStorage.getItem('username')}/your-links`}>
-        Your Links
+        Your Notes
       </Link>
       </>
       logConditional = <Link onClick={this.logOut} to='/'>Logout</Link>
     }
     return(
       <React.Fragment>
-        <div className="nav-container">
+        <div className="container-fluid nav-container">
           <Navbar>
             <div className="main">
               <Link to='/'>

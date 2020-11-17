@@ -1,10 +1,11 @@
-//imports
+  //imports
 import React from 'react';
 import {
   Carousel
 } from 'react-bootstrap';
 import Youtube from 'react-youtube';
 import CommentForm from './CommentForm.js';
+import '../css/LinkForm.css'
 // assets
 import incin from '../assets/incin.jpg';
 import darksamus from '../assets/darksamus.jpg';
@@ -18,14 +19,15 @@ class LinkForm extends React.Component {
     super(props);
 
     this.state= {
-      youtube_url: 'https://www.youtube.com/watch?v=m6CrWBOxecY',
-      title: 'mkleo',
+      youtube_url: '',
+      title: '',
       comments: [],
       isCommenting: false,
-      isEditing: false,
+      isEditing: true,
       youtube_ID: '',
       timestamp: '0',
       parsedStamp: '0s',
+      commentId: '',
       // username: '',
 
     }
@@ -40,15 +42,15 @@ class LinkForm extends React.Component {
   }
 
   getTimestamp(event) {
-    const timestamp = event.target.getCurrentTime()
-    const TIME = new Date(timestamp * 1000).toISOString().substr(11, 8)
-    let finalTime
+    const timestamp = event.target.getCurrentTime();
+    const TIME = new Date(timestamp * 1000).toISOString().substr(11, 8);
+    let finalTime;
     if(timestamp<60) {
-      finalTime = TIME.substr(6, 7) + 's'
+      finalTime = TIME.substr(6, 7) + 's';
     } else if (timestamp<600) {
-      finalTime = TIME.substr(4,7)
+      finalTime = TIME.substr(4,7);
     } else if (timestamp<3600) {
-      finalTime = TIME.substr(3,7)
+      finalTime = TIME.substr(3,7);
     }
     this.setState({parsedStamp: finalTime, timestamp: timestamp});
   }
@@ -122,41 +124,45 @@ class LinkForm extends React.Component {
                 onReady={this.onReady}
               />
 
-              <div className={`video-title ${this.state.isCommenting ? '' : 'hidden'} `}>
+              <div className={`video-title ${this.state.isCommenting ? '' : 'hidden'} ${this.state.isEditing ? 'hidden': ''} `}>
                 <h2>{`${this.state.title}`}</h2>
                 <button type='button' className='button' onClick={() => this.toggleTitle()}>Edit</button>
               </div>
             </div>
-            <div className={`url-title ${this.state.isEditing ? 'hidden': ''}`}>
+            <div className={`url-title ${this.state.isEditing ? '': 'hidden'}`}>
               <div className="title-form">
                 <input className='title-input' type="text" name='title' onChange={this.handleInput} value={this.state.title} placeholder='Title' maxlength='40'/>
                 <input className='url-input' type="url" name='youtube_url' onChange={this.handleInput} value={this.state.youtube_url} placeholder='Youtube URL'/>
-                <button class='button' disabled={!this.state.youtube_url} onClick={this.showForm}>{`${this.state.isEditing ? 'Update': 'Continue'}`}</button>
+                <button class='button' disabled={!this.state.youtube_url} onClick={this.showForm}>{`${this.state.isCommenting ? 'Update': 'Continue'}`}</button>
               </div>
               </div>
           </div>
           <div className={`right-side ${this.state.isCommenting ? '': 'hidden'} col-lg-5`}>
+            {
+              this.state.comments.map((comment, index) => (
+
+                  <div className='display-comment' key={index}>
+                    <button type='button timestamp-button' className='button' onClick={() => this.seekToTime(comment.timestamp)}>
+                      <div className="timestamp">
+                        <span className='at'>@</span><span className='parsedStamp'>{comment.parsedStamp}</span>
+                      </div>
+                      <span className='body'>{comment.body}</span>
+                    </button>
+                    <button className='x-button' onClick={() => this.removeComment(index)}>
+                      <span className="iconify x-icon" data-icon="octicon-x" data-inline="false"></span>
+                    </button>
+                    {/* <button type='button' onClick={() => this.removeComment(index)}>Remove</button> */}
+                  </div>
+              ))
+            }
             <form onSubmit={(event) => this.props.submitLink(event, this.state)}>
-              {
-                this.state.comments.map((comment, index) => (
-
-                    <div className='display-comment' key={index}>
-                      <button type='button' className='timestamp-button' onClick={() => this.seekToTime(comment.timestamp)}>
-                        <span className='parsed-stamp'>{comment.parsedStamp}</span>
-                        <span className='comment-body'>{comment.body}</span>
-                      </button>
-
-                      <button type='button' onClick={() => this.removeComment(index)}>Remove</button>
-                    </div>
-                ))
-              }
               <CommentForm
                 className={`comment-form`}
                 addComment={this.addComment}
                 timestamp={this.state.timestamp}
                 parsedStamp={this.state.parsedStamp}
               />
-              <button className='button' type="submit">Save</button>
+              <button className='button save' type="submit">Save</button>
             </form>
           </div>
         </div>

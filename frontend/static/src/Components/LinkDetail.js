@@ -1,10 +1,8 @@
 import React from 'react';
 import Youtube from 'react-youtube';
 import Cookies from 'js-cookie';
-// npm install --save-dev @iconify/react @iconify-icons/eva
-import { Icon } from '@iconify/react';
-import edit2Fill from '@iconify-icons/eva/edit-2-fill';
-import trashFill from '@iconify-icons/eva/trash-fill';
+import '../css/LinkDetail.css'
+
 import CommentForm from './CommentForm.js';
 
 
@@ -140,28 +138,66 @@ class LinkDetail extends React.Component {
 
   render() {
     const opts = {
-      height: '390',
-      width: '640',
+      height: '438.75px',
+      width: '100%',
     }
     return(
-      <div className="container">
-        <Youtube videoId={this.state.youtube_ID} opts={opts} onPause={this.getTimestamp} onReady={this.onReady}/>
-        <div className={`info ${this.state.isEditing ? 'hidden': ''}`}>
-          <div className="title">
-            <h3>{`${this.state.title}//${localStorage.getItem('username')}`}</h3>
-            <Icon onClick={this.edit} icon={edit2Fill} />
-            <Icon onClick={this.deleteMethod} icon={trashFill} />
-          </div>
-          {this.state.comments.map((comment, index) => (
-            <div key={index}>
-              <button onClick={() => this.seekToTime(comment.timestamp)}>
-                <span>{comment.parsedStamp}</span>
-                <span>{comment.body}</span>
-              </button>
+      <div className="container-fluid">
+        <div className="link-detail">
+          <div className="left-side col-12 col-lg-7">
+            <div className={`youtube-container`}>
+              <Youtube
+                className='youtube-player'
+                videoId={this.state.youtube_ID}
+                opts={opts}
+                onPause={this.getTimestamp}
+                onReady={this.onReady}
+              />
+
+              <div className={`video-title`}>
+                <h2>{`${this.state.title}`}</h2>
+                <button type='button' className='button' onClick={() => this.toggleTitle()}>Edit</button>
+              </div>
             </div>
-          ))}
+            <div className={`url-title ${this.state.isEditing ? '': 'hidden'}`}>
+              <div className="title-form">
+                <input className='title-input' type="text" name='title' onChange={this.handleInput} value={this.state.title} placeholder='Title' maxlength='40'/>
+                <input className='url-input' type="url" name='youtube_url' onChange={this.handleInput} value={this.state.youtube_url} placeholder='Youtube URL'/>
+                <button class='button' disabled={!this.state.youtube_url} onClick={this.showForm}>{`${this.state.isCommenting ? 'Update': 'Continue'}`}</button>
+              </div>
+              </div>
+          </div>
+          <div className={`right-side ${this.state.isCommenting ? '': 'hidden'} col-lg-5`}>
+            {
+              this.state.comments.map((comment, index) => (
+
+                  <div className='display-comment' key={index}>
+                    <button type='button timestamp-button' className='button' onClick={() => this.seekToTime(comment.timestamp)}>
+                      <div className="timestamp">
+                        <span className='at'>@</span><span className='parsedStamp'>{comment.parsedStamp}</span>
+                      </div>
+                      <span className='body'>{comment.body}</span>
+                    </button>
+                    <button className='x-button' onClick={() => this.removeComment(index)}>
+                      <span className="iconify x-icon" data-icon="octicon-x" data-inline="false"></span>
+                    </button>
+                    {/* <button type='button' onClick={() => this.removeComment(index)}>Remove</button> */}
+                  </div>
+              ))
+            }
+            <form onSubmit={(event) => this.props.submitLink(event, this.state)}>
+              <CommentForm
+                className={`comment-form`}
+                addComment={this.addComment}
+                timestamp={this.state.timestamp}
+                parsedStamp={this.state.parsedStamp}
+              />
+              <button className='button save' type="submit">Save</button>
+            </form>
+          </div>
         </div>
-        <div className={`editForm ${this.state.isEditing ? '': 'hidden'}`}>
+
+        {/* <div className={`editForm ${this.state.isEditing ? '': 'hidden'}`}>
           <form onSubmit={this.updateLink}>
             <div className='url-title'>
               <input type='url' value={this.state.youtube_url} onChange={this.handleInput} name='youtube_url' placeholder='Youtube URL'/>
@@ -187,7 +223,7 @@ class LinkDetail extends React.Component {
             </div>
             <button type='submit'>Save</button>
           </form>
-        </div>
+        </div> */}
       </div>
     )
   }
