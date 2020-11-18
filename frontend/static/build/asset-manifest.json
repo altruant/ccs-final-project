@@ -1,8 +1,8 @@
 {
   "files": {
-    "main.css": "/static/css/main.cc1069c9.chunk.css",
-    "main.js": "/static/js/main.31a4dd93.chunk.js",
-    "main.js.map": "/static/js/main.31a4dd93.chunk.js.map",
+    "main.css": "/static/css/main.c1556329.chunk.css",
+    "main.js": "/static/js/main.ee8152a1.chunk.js",
+    "main.js.map": "/static/js/main.ee8152a1.chunk.js.map",
     "runtime-main.js": "/static/js/runtime-main.2bfee368.js",
     "runtime-main.js.map": "/static/js/runtime-main.2bfee368.js.map",
     "static/css/2.20aa2d7b.chunk.css": "/static/css/2.20aa2d7b.chunk.css",
@@ -12,7 +12,7 @@
     "static/js/3.3efd7a90.chunk.js.map": "/static/js/3.3efd7a90.chunk.js.map",
     "index.html": "/index.html",
     "static/css/2.20aa2d7b.chunk.css.map": "/static/css/2.20aa2d7b.chunk.css.map",
-    "static/css/main.cc1069c9.chunk.css.map": "/static/css/main.cc1069c9.chunk.css.map",
+    "static/css/main.c1556329.chunk.css.map": "/static/css/main.c1556329.chunk.css.map",
     "static/js/2.e94d8adb.chunk.js.LICENSE.txt": "/static/js/2.e94d8adb.chunk.js.LICENSE.txt",
     "static/media/Wordmark-Color.ff6b0ef2.png": "/static/media/Wordmark-Color.ff6b0ef2.png",
     "static/media/bayo.a518da5c.jpg": "/static/media/bayo.a518da5c.jpg",
@@ -26,7 +26,7 @@
     "static/js/runtime-main.2bfee368.js",
     "static/css/2.20aa2d7b.chunk.css",
     "static/js/2.e94d8adb.chunk.js",
-    "static/css/main.cc1069c9.chunk.css",
-    "static/js/main.31a4dd93.chunk.js"
+    "static/css/main.c1556329.chunk.css",
+    "static/js/main.ee8152a1.chunk.js"
   ]
 }
