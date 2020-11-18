@@ -13,30 +13,33 @@ class LinkDetail extends React.Component {
 
     this.state = {
       player: null,
-      isEditing: false,
+      isTitle: false,
       comments: [],
       parsedStamp: '0s',
-      timestamp: '0'
+      timestamp: '0',
+      isOwner: false,
     }
-    this.getTimestamp=this.getTimestamp.bind(this)
-    this.getIDFomURL=this.getIDFomURL.bind(this)
-    this.handleInput=this.handleInput.bind(this)
-    this.handleSubInput=this.handleSubInput.bind(this)
-    this.onReady=this.onReady.bind(this)
-    this.seekToTime=this.seekToTime.bind(this)
+    this.getTimestamp=this.getTimestamp.bind(this);
+    this.getIDFomURL=this.getIDFomURL.bind(this);
+    this.handleInput=this.handleInput.bind(this);
+    this.onReady=this.onReady.bind(this);
+    this.seekToTime=this.seekToTime.bind(this);
     this.addComment = this.addComment.bind(this);
     this.removeComment=this.removeComment.bind(this);
-    this.edit=this.edit.bind(this)
-    this.updateLink=this.updateLink.bind(this)
-    this.deleteMethod=this.deleteMethod.bind(this)
+    this.edit=this.edit.bind(this);
+    this.updateLink=this.updateLink.bind(this);
+    this.toggleTitle=this.toggleTitle.bind(this);
   }
 
 
-  componentDidMount() {
-    fetch(`/api/links/${this.props.match.params.id}/`)
-      .then(response => response.json())
-      // .then(data => console.log(data))
-      .then(data => this.setState({...data}))
+  async componentDidMount() {
+    const response =  await fetch(`/api/links/${this.props.match.params.id}/`)
+    const data =  await response.json()
+    this.setState({...data})
+    if(this.state.username === localStorage.getItem('username')) {
+      this.setState({isOwner: true})
+    }
+
   }
 
   async updateLink(event) {
@@ -61,21 +64,10 @@ class LinkDetail extends React.Component {
     this.setState({isEditing: !this.state.isEditing})
   }
 
-  deleteMethod() {
-    fetch(`/api/links/${this.props.match.params.id}/`, {
-      method: 'DELETE',
-      headers: {
-        'X-CSRFToken': Cookies.get('csrftoken'),
-        'Content-Type': 'application/json',
-      },
-    })
-      .then(response => {
-        // response.json()
-        this.props.history.push(`/${localStorage.getItem('username')}/your-links`);
-      })
-      // .then(data => console.log(data))
-      .catch(err => console.log('ERR', err))
 
+
+  toggleTitle() {
+    this.setState({isTitle: !this.state.isTitle})
   }
 
   getTimestamp(event) {
@@ -110,12 +102,6 @@ class LinkDetail extends React.Component {
     this.setState({[event.target.name]: event.target.value})
   }
 
-  handleSubInput(event, index) {
-    let comments = [...this.state.comments]
-    comments[index].body = event.target.value
-    this.setState(comments)
-  }
-
   onReady(event) {
     this.setState({player: event.target})
   }
@@ -138,7 +124,6 @@ class LinkDetail extends React.Component {
 
   render() {
     const opts = {
-      height: '438.75px',
       width: '100%',
     }
     return(
@@ -146,28 +131,32 @@ class LinkDetail extends React.Component {
         <div className="link-detail">
           <div className="left-side col-12 col-lg-7">
             <div className={`youtube-container`}>
-              <Youtube
-                className='youtube-player'
-                videoId={this.state.youtube_ID}
-                opts={opts}
-                onPause={this.getTimestamp}
-                onReady={this.onReady}
-              />
-
-              <div className={`video-title`}>
+              <div className="iframe-container">
+                <Youtube
+                  className='youtube-player'
+                  videoId={this.state.youtube_ID}
+                  opts={opts}
+                  onPause={this.getTimestamp}
+                  onReady={this.onReady}
+                />
+                </div>
+              <div className={`video-title ${this.state.isTitle ? 'hidden': ''}`}>
                 <h2>{`${this.state.title}`}</h2>
-                <button type='button' className='button' onClick={() => this.toggleTitle()}>Edit</button>
+                <button type='button' className={`${this.state.isOwner ? '': 'hidden'} button`} onClick={() => this.toggleTitle()}>Edit</button>
               </div>
             </div>
-            <div className={`url-title ${this.state.isEditing ? '': 'hidden'}`}>
+            <div className={`url-title ${this.state.isOwner ? '': 'hidden'} ${this.state.isTitle ? '': 'hidden'}`}>
               <div className="title-form">
                 <input className='title-input' type="text" name='title' onChange={this.handleInput} value={this.state.title} placeholder='Title' maxlength='40'/>
                 <input className='url-input' type="url" name='youtube_url' onChange={this.handleInput} value={this.state.youtube_url} placeholder='Youtube URL'/>
-                <button class='button' disabled={!this.state.youtube_url} onClick={this.showForm}>{`${this.state.isCommenting ? 'Update': 'Continue'}`}</button>
+                <button class='button' disabled={!this.state.youtube_url} onClick={() => {
+                  this.toggleTitle();
+                  this.getIDFomURL();
+                }}>Update</button>
               </div>
               </div>
           </div>
-          <div className={`right-side ${this.state.isCommenting ? '': 'hidden'} col-lg-5`}>
+          <div className={`right-side col-lg-5`}>
             {
               this.state.comments.map((comment, index) => (
 
@@ -178,14 +167,13 @@ class LinkDetail extends React.Component {
                       </div>
                       <span className='body'>{comment.body}</span>
                     </button>
-                    <button className='x-button' onClick={() => this.removeComment(index)}>
+                    <button className={`${this.state.isOwner ? '' : 'hidden'} x-button`} onClick={() => this.removeComment(index)}>
                       <span className="iconify x-icon" data-icon="octicon-x" data-inline="false"></span>
                     </button>
-                    {/* <button type='button' onClick={() => this.removeComment(index)}>Remove</button> */}
                   </div>
               ))
             }
-            <form onSubmit={(event) => this.props.submitLink(event, this.state)}>
+            <form className={`${this.state.isOwner ? '':'hidden'}`} onSubmit={(event) => this.updateLink(event, this.state)}>
               <CommentForm
                 className={`comment-form`}
                 addComment={this.addComment}

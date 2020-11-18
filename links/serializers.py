@@ -8,10 +8,11 @@ from rest_framework import serializers
 
 class LinkSerializer(serializers.ModelSerializer):
     # comments = CommentSerializer(many=True)
+    username=serializers.ReadOnlyField(source='user.username')
 
     class Meta:
         model = Link
-        fields = ('youtube_url', 'youtube_ID', 'user', 'title', 'id', 'pub_date', 'comments')
+        fields = ('youtube_url', 'youtube_ID', 'username', 'title', 'id', 'pub_date', 'comments')
 
     # def create(self, validated_data):
     #     comments_data = validated_data.pop('comments')

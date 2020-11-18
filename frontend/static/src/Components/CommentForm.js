@@ -28,7 +28,7 @@ class CommentForm extends React.Component {
         <div className="timestamp">
           <span className='at'>@</span><span className='parsedStamp'>{this.props.parsedStamp}</span>
         </div>
-        <textarea type="text" name='body' value={this.state.body} onChange={this.handleInput} placeholder='New Comment'/>
+        <textarea type="text" name='body' value={this.state.body} onChange={this.handleInput} placeholder='New Comment' maxLength='200'/>
         <button className={`button ${this.state.body ? '': 'hidden'}`} type="button" onClick={this.addComment}>Add Comment</button>
       </div>
     )

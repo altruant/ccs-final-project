@@ -71,7 +71,7 @@ class App extends React.Component {
 
     const data = await response.json();
     console.log('Response', data)
-    Cookies.set('Authorization', `Token ${data.key}`)
+    Cookies.set('Authorization', `${data.key}`)
     localStorage.setItem('login', `${data.key}`)
     localStorage.setItem('username', `${data.user.username}`)
     this.props.history.push('/')
@@ -90,10 +90,11 @@ class App extends React.Component {
 
     const data = await response.json();
     console.log('Response', data)
-    Cookies.set('Authorization', `Token ${data.key}`)
+    Cookies.set('Authorization', `${data.key}`)
     localStorage.setItem('login', data.key)
     localStorage.setItem('username', `${data.user.username}`)
     this.props.history.push('/')
+    window.location.reload(true);
   }
 
   async submitLink(event, info) {
@@ -109,7 +110,7 @@ class App extends React.Component {
       body: JSON.stringify(newState)
     })
     const data = await response.json()
-    this.props.history.push(`/${this.state.username}/${data.id}`)
+    this.props.history.push(`/${this.state.username}/your-notes`)
     console.log('Response', data)
   }
 
@@ -129,7 +130,7 @@ class App extends React.Component {
       </>
     } else {
       yourLinks=<>
-      <Link to={`/${localStorage.getItem('username')}/your-links`}>
+      <Link to={`/${localStorage.getItem('username')}/your-notes`}>
         Your Notes
       </Link>
       </>
@@ -138,19 +139,22 @@ class App extends React.Component {
     return(
       <React.Fragment>
         <div className="container-fluid nav-container">
-          <Navbar>
-            <div className="main">
-              <Link to='/'>
-                <img src={Wordmark_Color} alt="#"/>
-              </Link>
-              <Link to='/create'>
-                Create
-              </Link>
-              {yourLinks}
-            </div>
-            <div className="user">
-              {logConditional}
-            </div>
+          <Navbar expand='md' className='top-nav'>
+            <Navbar.Toggle aria-controls="basic-navbar-nav"/>
+            <Link to='/'>
+              <img src={Wordmark_Color} alt="#"/>
+            </Link>
+            <Navbar.Collapse className='collapse'>
+              <div className="main">
+                <Link to='/create'>
+                  Create
+                </Link>
+                {yourLinks}
+              </div>
+              <div className="user">
+                {logConditional}
+              </div>
+            </Navbar.Collapse>
           </Navbar>
         </div>
 
@@ -164,10 +168,11 @@ class App extends React.Component {
           <Route path='/create'>
             <LinkForm submitLink={this.submitLink}/>
           </Route>
-          <Route path={`/${this.state.username}/your-links`}>
+          <Route path={`/${this.state.username}/your-notes`}>
             <LinkList username={this.state.username} />
           </Route>
           <Route path={`/${this.state.username}/:id`} exact component={LinkDetail} />
+          <Route path={`/notes/:id`} exact component={LinkDetail} />
           <Route path='/' component={Home} />
         </Switch>
       </React.Fragment>

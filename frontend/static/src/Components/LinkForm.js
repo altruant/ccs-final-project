@@ -99,11 +99,9 @@ class LinkForm extends React.Component {
   }
 
   render() {
-
     let formConditional
     const opts = {
-      height: '438.75px',
-      width: '100%',
+      width: '100%'
     }
     if(localStorage.getItem('login')===null) {
       formConditional =
@@ -116,23 +114,24 @@ class LinkForm extends React.Component {
         <div className="form">
           <div className="left-side col-12 col-lg-7">
             <div className={`youtube-container ${this.state.isCommenting ? '': 'hidden'}`}>
-              <Youtube
-                className='youtube-player'
-                videoId={this.state.youtube_ID}
-                opts={opts}
-                onPause={this.getTimestamp}
-                onReady={this.onReady}
-              />
-
-              <div className={`video-title ${this.state.isCommenting ? '' : 'hidden'} ${this.state.isEditing ? 'hidden': ''} `}>
-                <h2>{`${this.state.title}`}</h2>
-                <button type='button' className='button' onClick={() => this.toggleTitle()}>Edit</button>
-              </div>
+              <div className={`iframe-container`}>
+                <Youtube
+                  className='youtube-player'
+                  videoId={this.state.youtube_ID}
+                  onPause={this.getTimestamp}
+                  onReady={this.onReady}
+                  opts={opts}
+                />
+                </div>
+                <div className={`video-title ${this.state.isCommenting ? '' : 'hidden'} ${this.state.isEditing ? 'hidden': ''} `}>
+                  <h2>{`${this.state.title}`}</h2>
+                  <button type='button' className='button' onClick={() => this.toggleTitle()}>Edit</button>
+                </div>
             </div>
             <div className={`url-title ${this.state.isEditing ? '': 'hidden'}`}>
               <div className="title-form">
-                <input className='title-input' type="text" name='title' onChange={this.handleInput} value={this.state.title} placeholder='Title' maxlength='40'/>
-                <input className='url-input' type="url" name='youtube_url' onChange={this.handleInput} value={this.state.youtube_url} placeholder='Youtube URL'/>
+                <input className='title-input col-12' type="text" name='title' onChange={this.handleInput} value={this.state.title} placeholder='Title' maxLength='40'/>
+                <input className='url-input col' type="url" name='youtube_url' onChange={this.handleInput} value={this.state.youtube_url} placeholder='Youtube URL' maxLength='40'/>
                 <button class='button' disabled={!this.state.youtube_url} onClick={this.showForm}>{`${this.state.isCommenting ? 'Update': 'Continue'}`}</button>
               </div>
               </div>
@@ -176,20 +175,20 @@ class LinkForm extends React.Component {
           <h1 className='page-title'>Create</h1>
           <Carousel className='carousel' interval='8000' controls={false} indicators={false}>
             <Carousel.Item>
-              <img className='d-block w-100' src={bayo} alt="bayo"/>
+              <img className='d-block' src={bayo} alt="bayo"/>
             </Carousel.Item>
             <Carousel.Item>
-              <img className='d-block w-100' src={incin} alt="incin"/>
+              <img className='d-block' src={incin} alt="incin"/>
             </Carousel.Item>
             <Carousel.Item>
-              <img className='d-block w-100' src={darksamus} alt="dsamus"/>
+              <img className='d-block' src={darksamus} alt="dsamus"/>
             </Carousel.Item>
             <Carousel.Item>
-              <img className='d-block w-100' src={ken} alt="ken"/>
+              <img className='d-block' src={ken} alt="ken"/>
             </Carousel.Item>
           </Carousel>
         </div>
-        <div className="form-container">
+        <div className="form-container container-fluid;">
           {formConditional}
         </div>
       </div>

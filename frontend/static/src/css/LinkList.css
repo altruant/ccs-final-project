@@ -1,4 +1,28 @@
-@media (min-width: 992px) {
+@media (max-width: 720px) {
+  .img-container {
+    width: 100%;
+
+    position: relative;
+  }
+
+  .img-container img {
+    width: 100%;
+    position: absolute;
+    z-index: 0;
+  }
+
+  .list-container {
+    padding: 0 0;
+    display: flex;
+    animation: fade_in 1.2s ease .3s
+  }
+
+}
+
+
+
+
+@media (min-width: 720px) {
 
   .list-page {
     padding-top: 5%;
@@ -24,7 +48,7 @@
   .list-container {
     padding: 3% 5vw;
     display: flex;
-    animation: fade_in 1.2s ease .2s
+    animation: fade_in 1.2s ease .3s
   }
 
   a {
@@ -56,16 +80,22 @@
 
   .list-container h2 {
     position: absolute;
-    top: 70%;
+    top: 60%;
     left: 4%;
     font-size: 3em;
     font-weight: 800;
   }
   .list-container h3 {
     position: absolute;
-    top: 60%;
+    top: 50%;
     left: 4%;
 
+  }
+
+  .list-x {
+    position: absolute;
+    top: 15px;
+    left: 80%;
   }
 
 }
