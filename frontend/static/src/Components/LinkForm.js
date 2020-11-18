@@ -121,7 +121,7 @@ class LinkForm extends React.Component {
                   onPause={this.getTimestamp}
                   onReady={this.onReady}
                   opts={opts}
-                  playsinline='0'
+                  playsinline='1'
                 />
                 </div>
                 <div className={`video-title ${this.state.isCommenting ? '' : 'hidden'} ${this.state.isEditing ? 'hidden': ''} `}>
