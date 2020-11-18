@@ -148,7 +148,7 @@ class LinkDetail extends React.Component {
             <div className={`url-title ${this.state.isOwner ? '': 'hidden'} ${this.state.isTitle ? '': 'hidden'}`}>
               <div className="title-form">
                 <input className='title-input' type="text" name='title' onChange={this.handleInput} value={this.state.title} placeholder='Title' maxlength='40'/>
-                <input className='url-input' type="url" name='youtube_url' onChange={this.handleInput} value={this.state.youtube_url} placeholder='Youtube URL'/>
+                <input className='url-input' type="url" name='youtube_url' onChange={this.handleInput} value={this.state.youtube_url} placeholder='Youtube URL' maxLength='100'/>
                 <button class='button' disabled={!this.state.youtube_url} onClick={() => {
                   this.toggleTitle();
                   this.getIDFomURL();

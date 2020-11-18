@@ -61,6 +61,7 @@ class LinkForm extends React.Component {
 
   YouTubeGetID(url){
     url = url.split(/(vi\/|v=|\/v\/|youtu\.be\/|\/embed\/)/);
+    console.log(url)
     return (url[2] !== undefined) ? url[2].split(/[^0-9a-z_-]/i)[0] : url[0];
   }
 
@@ -101,7 +102,8 @@ class LinkForm extends React.Component {
   render() {
     let formConditional
     const opts = {
-      width: '100%'
+      width: '100%',
+      playsinline: '1',
     }
     if(localStorage.getItem('login')===null) {
       formConditional =
@@ -121,7 +123,6 @@ class LinkForm extends React.Component {
                   onPause={this.getTimestamp}
                   onReady={this.onReady}
                   opts={opts}
-                  playsinline='1'
                 />
                 </div>
                 <div className={`video-title ${this.state.isCommenting ? '' : 'hidden'} ${this.state.isEditing ? 'hidden': ''} `}>
@@ -132,7 +133,7 @@ class LinkForm extends React.Component {
             <div className={`url-title ${this.state.isEditing ? '': 'hidden'}`}>
               <div className="title-form">
                 <input className='title-input col-12' type="text" name='title' onChange={this.handleInput} value={this.state.title} placeholder='Title' maxLength='40'/>
-                <input className='url-input col' type="url" name='youtube_url' onChange={this.handleInput} value={this.state.youtube_url} placeholder='Youtube URL' maxLength='40'/>
+                <input className='url-input col' type="url" name='youtube_url' onChange={this.handleInput} value={this.state.youtube_url} placeholder='Youtube URL' maxLength='100'/>
                 <button class='button' disabled={!this.state.youtube_url} onClick={this.showForm}>{`${this.state.isCommenting ? 'Update': 'Continue'}`}</button>
               </div>
               </div>
