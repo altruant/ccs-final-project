@@ -14,7 +14,7 @@
   .list-container {
     padding: 0 0;
     display: flex;
-    animation: fade_in 1.2s ease .3s
+
   }
 
 }
@@ -29,26 +29,17 @@
   }
 
   .list-page .page-title {
-    font-size: 8em;
+    font-size: 7em;
     margin-top: 19vh;
-    animation: fade_in_down_lower 1.2s ease-in-out 0s
+
   }
 
-  @keyframes fade_in_down_lower {
-    0% {
-      margin-top: 14vh;
-      opacity: 0%;
-    }
-    100% {
-      margin-top: 19vh;
-      opacity: 100%;
-    }
-  }
+
 
   .list-container {
     padding: 3% 5vw;
     display: flex;
-    animation: fade_in 1.2s ease .3s
+
   }
 
   a {

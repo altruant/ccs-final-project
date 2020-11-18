@@ -174,7 +174,7 @@ class LinkForm extends React.Component {
     return(
       <div className='linkform container-fluid'>
         <div className={`carousel-container ${this.state.isCommenting ? 'hidden': ''}`}>
-          <h1 className='page-title'>Create</h1>
+          <h1 className={`page-title ${this.state.isCommenting ? 'hidden': ''}`}>Create</h1>
           <Carousel className='carousel' interval='8000' controls={false} indicators={false}>
             <Carousel.Item>
               <img className='d-block' src={bayo} alt="bayo"/>

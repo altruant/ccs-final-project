@@ -1,26 +1,3 @@
-@keyframes fade_in_down {
-  0% {
-    top: 105px;
-    opacity: 0%;
-  }
-  100% {
-    top: 120px;
-    opacity: 100%;
-  }
-}
-
-@keyframes fade_in_down_lower {
-  0% {
-    opacity: 0%;
-    top: 135px;
-  }
-  100% {
-    opacity: 100%;
-    top: 150px;
-  }
-}
-
-
 
 body {
   background: #4f3961;
@@ -177,13 +154,13 @@ nav a:hover {
   .page-title {
     position: absolute;
     z-index: 12;
-    font-size: 7.3em;
+    font-size: 5em;
     font-family: 'Raleway';
     text-transform: uppercase;
     font-weight: 800;
-    top: 120px;
-    left: 20px;
-    animation: fade_in_down 1.2s ease-in-out 0s
+    top: 130px;
+    left: 10%;
+
   }
 
   input, textarea {
@@ -196,7 +173,7 @@ nav a:hover {
   }
 
   .title-form button {
-    width: 25%;
+    width: 100%;
     margin-top: 30px;
     font-size: 20px;
     border: 1px solid #fff;
@@ -205,12 +182,14 @@ nav a:hover {
 
 
   .list-page .page-title {
-    font-size: 4.5em;
+    font-size: 3.35em;
     top: 150px;
-    animation: fade_in_down_lower 1.2s ease-in-out
+
   }
 
-
+  .title-form {
+    padding: 10px 20px;
+  }
 
   .youtube-container {
     padding: 60px 0px 15px;
