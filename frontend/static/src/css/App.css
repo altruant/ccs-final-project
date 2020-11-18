@@ -75,6 +75,9 @@ nav a:hover {
    top: 0;
 }
 
+.form {
+
+}
 
 
 @media (max-width: 720px) {
@@ -142,8 +145,8 @@ nav a:hover {
     position: relative;
     top: -50px;
     left: -100px;
-    height: 100%;
-    min-width: 200%;
+    height: 10%;
+    min-width: 100%;
     filter: brightness(65%);
   }
 
