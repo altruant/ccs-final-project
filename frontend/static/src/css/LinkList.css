@@ -1,20 +1,49 @@
 @media (max-width: 720px) {
+  .info {
+    color: #fff;
+  }
+  .list-container a {
+    padding: 0;
+  }
   .img-container {
+    max-width: 400px;
     width: 100%;
-
+    overflow: hidden;
     position: relative;
   }
 
   .img-container img {
-    width: 100%;
-    position: absolute;
-    z-index: 0;
+    margin: -9.5% 0;
+    max-width: 100%;
+    height: auto;
+    filter: brightness(65%);
+    text-overflow: ellipsis;
   }
 
   .list-container {
     padding: 0 0;
     display: flex;
 
+  }
+
+  .list-container h2 {
+    position: absolute;
+    top: 60%;
+    left: 4%;
+    font-size: 3em;
+    font-weight: 800;
+  }
+  .list-container h3 {
+    position: absolute;
+    top: 50%;
+    left: 4%;
+
+  }
+
+  .list-x {
+    position: absolute;
+    top: 15px;
+    left: 85%;
   }
 
 }
@@ -29,7 +58,7 @@
   }
 
   .list-page .page-title {
-    font-size: 7em;
+    font-size: 8em;
     margin-top: 19vh;
 
   }
