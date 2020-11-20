@@ -20,11 +20,9 @@ class LoginForm extends React.Component {
       <div className="container login">
         <form onSubmit={(e) => this.props.logIn(e, this.state)}>
           <h2>Login</h2>
-          <label htmlFor="username">Username</label>
-            <input type="text" name="username" value={this.state.username} onChange={this.handleInput} placeholder="Username"/>
-          <label htmlFor="password">Password</label>
-            <input type="password" name="password" value={this.state.password} onChange={this.handleInput} placeholder="Password"/>
-          <button type='submit'>Login</button>
+          <input className='username' type="text" name="username" value={this.state.username} onChange={this.handleInput} placeholder="Username"/>
+          <input className='password' type="password" name="password" value={this.state.password} onChange={this.handleInput} placeholder="Password"/>
+          <button className='button login-button col-12 col-md-2' type='submit'>Login</button>
         </form>
       </div>
 

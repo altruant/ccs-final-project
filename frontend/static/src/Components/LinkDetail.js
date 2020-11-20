@@ -1,9 +1,10 @@
 import React from 'react';
 import Youtube from 'react-youtube';
 import Cookies from 'js-cookie';
-import '../css/LinkDetail.css'
-
+import '../css/LinkDetail.css';
+import { CopyToClipboard } from 'react-copy-to-clipboard';
 import CommentForm from './CommentForm.js';
+import CommentDetail from './CommentDetail.js'
 
 
 
@@ -13,7 +14,7 @@ class LinkDetail extends React.Component {
 
     this.state = {
       player: null,
-      isTitle: false,
+      isEditing: false,
       comments: [],
       parsedStamp: '0s',
       timestamp: '0',
@@ -28,7 +29,7 @@ class LinkDetail extends React.Component {
     this.removeComment=this.removeComment.bind(this);
     this.edit=this.edit.bind(this);
     this.updateLink=this.updateLink.bind(this);
-    this.toggleTitle=this.toggleTitle.bind(this);
+    this.updateComment=this.updateComment.bind(this);
   }
 
 
@@ -64,11 +65,6 @@ class LinkDetail extends React.Component {
     this.setState({isEditing: !this.state.isEditing})
   }
 
-
-
-  toggleTitle() {
-    this.setState({isTitle: !this.state.isTitle})
-  }
 
   getTimestamp(event) {
     const timestamp = event.target.getCurrentTime()
@@ -122,6 +118,13 @@ class LinkDetail extends React.Component {
     this.setState({comments});
   }
 
+  updateComment(comment, newBody) {
+    const comments = [...this.state.comments];
+    const index = comments.indexOf(comment);
+    comments[index].body = newBody;
+    this.setState({comments});
+  }
+
   render() {
     const opts = {
       width: '100%',
@@ -140,40 +143,37 @@ class LinkDetail extends React.Component {
                   onReady={this.onReady}
                 />
                 </div>
-              <div className={`video-title ${this.state.isTitle ? 'hidden': ''}`}>
+              <div className={`video-title ${this.state.isEditing ? 'hidden': ''}`}>
                 <h2>{`${this.state.title}`}</h2>
-                <button type='button' className={`${this.state.isOwner ? '': 'hidden'} button`} onClick={() => this.toggleTitle()}>Edit</button>
+                <div className="buttons">
+                  <button type='button' className={`${this.state.isOwner ? '': 'hidden'} button`} onClick={() => this.edit()}>Edit</button>
+                  <CopyToClipboard text={`http://ccs-sweetspot.herokuapp.com/notes/${this.props.match.params.id}`}>
+                    <button className="button copy-button">Copy URL</button>
+                  </CopyToClipboard>
+                </div>
               </div>
             </div>
-            <div className={`url-title ${this.state.isOwner ? '': 'hidden'} ${this.state.isTitle ? '': 'hidden'}`}>
+            <div className={`url-title ${this.state.isEditing ? '': 'hidden'}`}>
               <div className="title-form">
-                <input className='title-input' type="text" name='title' onChange={this.handleInput} value={this.state.title} placeholder='Title' maxlength='40'/>
-                <input className='url-input' type="url" name='youtube_url' onChange={this.handleInput} value={this.state.youtube_url} placeholder='Youtube URL' maxLength='100'/>
-                <button class='button' disabled={!this.state.youtube_url} onClick={() => {
-                  this.toggleTitle();
-                  this.getIDFomURL();
-                }}>Update</button>
+                <input className='title-input col-12' type="text" name='title' onChange={this.handleInput} value={this.state.title} placeholder='Title' maxlength='40'/>
               </div>
-              </div>
+            </div>
           </div>
           <div className={`right-side col-lg-5`}>
             {
               this.state.comments.map((comment, index) => (
-
-                  <div className='display-comment' key={index}>
-                    <button type='button timestamp-button' className='button' onClick={() => this.seekToTime(comment.timestamp)}>
-                      <div className="timestamp">
-                        <span className='at'>@</span><span className='parsedStamp'>{comment.parsedStamp}</span>
-                      </div>
-                      <span className='body'>{comment.body}</span>
-                    </button>
-                    <button className={`${this.state.isOwner ? '' : 'hidden'} x-button`} onClick={() => this.removeComment(index)}>
-                      <span className="iconify x-icon" data-icon="octicon-x" data-inline="false"></span>
-                    </button>
-                  </div>
+                <CommentDetail
+                updateComment={this.updateComment}
+                comment={comment}
+                index={index}
+                seekToTime={this.seekToTime}
+                isEditing={this.state.isEditing}
+                isOwner={this.state.isOwner}
+                removeComment={this.removeComment}
+                />
               ))
             }
-            <form className={`${this.state.isOwner ? '':'hidden'}`} onSubmit={(event) => this.updateLink(event, this.state)}>
+            <form className={`${this.state.isEditing ? '':'hidden'}`} onSubmit={(event) => this.updateLink(event, this.state)}>
               <CommentForm
                 className={`comment-form`}
                 addComment={this.addComment}

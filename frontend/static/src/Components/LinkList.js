@@ -82,7 +82,7 @@ class LinkList extends React.Component {
                   <h3>{link.pub_date.substr(0,10)}</h3>
                 </div>
                 <div className="delete">
-                  <button className={`x-button`} onClick={() => this.deleteMethod(link.id)}>
+                  <button className={`icon-button x-button`} onClick={() => this.deleteMethod(link.id)}>
                     <span className="iconify x-icon list-x" data-icon="octicon-x" data-inline="false"></span>
                   </button>
                 </div>

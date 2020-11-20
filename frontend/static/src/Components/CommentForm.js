@@ -6,6 +6,7 @@ class CommentForm extends React.Component {
 
     this.state= {
       body: '',
+      isEditing: '',
     }
     this.handleInput = this.handleInput.bind(this);
     this.addComment = this.addComment.bind(this);

@@ -20,18 +20,14 @@ class RegisterForm extends React.Component {
 
   render() {
     return (
-      <div className="container">
+      <div className="register container">
         <form onSubmit={(e) => this.props.handleRegister(e, this.state)}>
           <h2>Register</h2>
-          <label htmlFor="username">Username</label>
-            <input type="text" name="username" value={this.state.username} onChange={this.handleInput} placeholder="Username"/>
-          <label htmlFor="email">Email</label>
-            <input type="email" name="email" value={this.state.email} onChange={this.handleInput} placeholder="Email"/>
-          <label htmlFor="password1">Password</label>
-            <input type="password" name="password1" value={this.state.password1} onChange={this.handleInput} placeholder="Password"/>
-          <label htmlFor="password2">Confirm Password</label>
-            <input type="password" name="password2" value={this.state.password2} onChange={this.handleInput} placeholder=""/>
-          <button type='submit'>Register</button>
+          <input className='username' type="text" name="username" value={this.state.username} onChange={this.handleInput} placeholder="Username"/>
+          <input className='username' type="email" name="email" value={this.state.email} onChange={this.handleInput} placeholder="Email"/>
+          <input className='username' type="password" name="password1" value={this.state.password1} onChange={this.handleInput} placeholder="Password"/>
+          <input className='username' type="password" name="password2" value={this.state.password2} onChange={this.handleInput} placeholder="Confirm Password"/>
+          <button className='login-button button'type='submit'>Register</button>
         </form>
       </div>
 

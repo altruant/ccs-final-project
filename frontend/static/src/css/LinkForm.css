@@ -6,23 +6,33 @@
 .display-comment:last-of-type {
   padding-bottom: 5vh;
 }
-.display-comment .button {
-  width: 80%;
+.display-comment .timestamp-button {
+  width: 90%;
   text-align: left;
   padding: 10px 20px;
   transition: all .3s ease;
   margin-bottom: 10px;
 }
-
-.display-comment .button:active, .display-comment .button:focus {
+.display-comment, .edit-delete-buttons {
+  display: flex
+}
+.display-comment {
+  align-items: flex-start;
+}
+.display-comment .timestamp-button:active, .display-comment .timestamp-button:focus {
   background: #fc9d9d;
   border: #fc9d9d solid 0.1em;
   color: #4f3961;
   font-size: 1.55em;
 }
-.x-button {
+.icon-button {
   background-color: #4f3961;
   border: none;
+}
+
+.edit-delete-buttons {
+  flex-direction: column;
+  justify-content: center;
 }
 
 .x-icon:hover {
@@ -35,6 +45,28 @@
   transition: all .3s ease
 }
 
+.gear-icon {
+  color: #fff;
+  width: 30px;
+  height: 30px;
+  transition: all .3s ease;
+}
+
+.gear-icon:hover {
+  color: #fc9d9d;
+}
+
+.check-icon {
+  color: #fff;
+  width: 30px;
+  height: 30px;
+  transition: all .3s ease;
+}
+
+.check-icon:hover {
+  color: #fc9d9d;
+}
+
 .save {
   color: #EB728B;
   border: #EB728B solid 3px;
@@ -45,6 +77,8 @@
   border-color: #EB728B;
 
 }
+
+
 
 
 @media (max-width: 720px) {
@@ -93,6 +127,8 @@
     display: flex;
     font-size: 20px;
     flex-direction: column;
+    padding-top: 20px;
+    padding-bottom: 15px;
   }
 
   .title-form input {
@@ -182,6 +218,14 @@
 }
 
 
-.login {
-  padding-top: 5.2%;
+.login, .register {
+  padding-top: 80px;
+}
+
+.comment-form-container{
+  width: 100%
+}
+
+.comment-form-container textarea{
+  width: 100%;
 }

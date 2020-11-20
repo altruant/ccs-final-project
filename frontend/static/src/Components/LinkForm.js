@@ -3,6 +3,9 @@ import React from 'react';
 import {
   Carousel
 } from 'react-bootstrap';
+import {
+  Link,
+} from 'react-router-dom';
 import Youtube from 'react-youtube';
 import CommentForm from './CommentForm.js';
 import '../css/LinkForm.css'
@@ -19,7 +22,7 @@ class LinkForm extends React.Component {
     super(props);
 
     this.state= {
-      youtube_url: '',
+      youtube_url: 'https://www.youtube.com/watch?v=QRdSkd5Lm5A',
       title: '',
       comments: [],
       isCommenting: false,
@@ -45,7 +48,9 @@ class LinkForm extends React.Component {
     const timestamp = event.target.getCurrentTime();
     const TIME = new Date(timestamp * 1000).toISOString().substr(11, 8);
     let finalTime;
-    if(timestamp<60) {
+    if(timestamp<10) {
+      finalTime = TIME.substr(7) + 's';
+    } else if (timestamp<60) {
       finalTime = TIME.substr(6, 7) + 's';
     } else if (timestamp<600) {
       finalTime = TIME.substr(4,7);
@@ -108,7 +113,14 @@ class LinkForm extends React.Component {
     if(localStorage.getItem('login')===null) {
       formConditional =
       <>
-        <span>Login to create a new Link</span>
+      <div className="landing-message">
+        <h2>
+          You are not logged-in, to create a new Note:
+        </h2>
+        <Link to='/login-form'>
+          Login
+        </Link>
+      </div>
       </>
     } else {
       formConditional =
@@ -133,9 +145,9 @@ class LinkForm extends React.Component {
             <div className={`url-title ${this.state.isEditing ? '': 'hidden'}`}>
               <div className="title-form">
                 <input className='title-input col-12' type="text" name='title' onChange={this.handleInput} value={this.state.title} placeholder='Title' maxLength='40'/>
-                <input className='url-input col' type="url" name='youtube_url' onChange={this.handleInput} value={this.state.youtube_url} placeholder='Youtube URL' maxLength='100'/>
-                <button class='button' disabled={!this.state.youtube_url} onClick={this.showForm}>{`${this.state.isCommenting ? 'Update': 'Continue'}`}</button>
+                <input className={`url-input col-12 ${this.state.isCommenting ? 'hidden': ''}`} type="url" name='youtube_url' onChange={this.handleInput} value={this.state.youtube_url} placeholder='Youtube URL' maxLength='100'/>
               </div>
+              <button class='button' disabled={!this.state.youtube_url} onClick={this.showForm}>{`${this.state.isCommenting ? 'Update': 'Continue'}`}</button>
               </div>
           </div>
           <div className={`right-side ${this.state.isCommenting ? '': 'hidden'} col-lg-5`}>
@@ -143,15 +155,20 @@ class LinkForm extends React.Component {
               this.state.comments.map((comment, index) => (
 
                   <div className='display-comment' key={index}>
-                    <button type='button timestamp-button' className='button' onClick={() => this.seekToTime(comment.timestamp)}>
+                    <button type='button' className='button timestamp-button' onClick={() => this.seekToTime(comment.timestamp)}>
                       <div className="timestamp">
                         <span className='at'>@</span><span className='parsedStamp'>{comment.parsedStamp}</span>
                       </div>
                       <span className='body'>{comment.body}</span>
                     </button>
-                    <button className='x-button' onClick={() => this.removeComment(index)}>
-                      <span className="iconify x-icon" data-icon="octicon-x" data-inline="false"></span>
-                    </button>
+                    <div className="edit-delete-buttons">
+                      <button type='button' className='icon-button' onClick={() => this.removeComment(index)}>
+                        <span className="iconify x-icon" data-icon="octicon-x" data-inline="false"></span>
+                      </button>
+                      <button type='button' className="icon-button">
+                        <span className="iconify gear-icon " data-icon="octicon:gear-24" data-inline="false"></span>
+                      </button>
+                    </div>
                     {/* <button type='button' onClick={() => this.removeComment(index)}>Remove</button> */}
                   </div>
               ))
