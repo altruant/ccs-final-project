@@ -72,7 +72,7 @@ class LinkList extends React.Component {
         </div>
         <div className='list-container'>
           {this.state.links.map((link, index) => (
-            <Link className='col-12 col-md-4 p-md-1' key={index} to={`/${this.props.username}/${link.id}`}>
+            <Link className='col-12 col-md-3 p-md-1' key={index} to={`/${this.props.username}/${link.id}`}>
               <div className='list-item '>
                 <div className="img-container">
                   <img src={`https://img.youtube.com/vi/${link.youtube_ID}/0.jpg`} alt="#"/>

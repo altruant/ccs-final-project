@@ -7,6 +7,7 @@ import {
   Link,
 } from 'react-router-dom';
 import Youtube from 'react-youtube';
+import CommentDetail from './CommentDetail.js'
 import CommentForm from './CommentForm.js';
 import '../css/LinkForm.css'
 // assets
@@ -22,11 +23,12 @@ class LinkForm extends React.Component {
     super(props);
 
     this.state= {
-      youtube_url: 'https://www.youtube.com/watch?v=QRdSkd5Lm5A',
+      youtube_url: 'https://www.youtube.com/watch?v=6DjjGii5Z80',
       title: '',
       comments: [],
       isCommenting: false,
       isEditing: true,
+      isOwner: true,
       youtube_ID: '',
       timestamp: '0',
       parsedStamp: '0s',
@@ -42,6 +44,7 @@ class LinkForm extends React.Component {
     this.toggleTitle=this.toggleTitle.bind(this);
     this.seekToTime=this.seekToTime.bind(this);
     this.onReady=this.onReady.bind(this);
+    this.updateComment=this.updateComment.bind(this);
   }
 
   getTimestamp(event) {
@@ -104,6 +107,13 @@ class LinkForm extends React.Component {
     this.setState({[event.target.name]: event.target.value})
   }
 
+  updateComment(comment, newBody) {
+    const comments = [...this.state.comments];
+    const index = comments.indexOf(comment);
+    comments[index].body = newBody;
+    this.setState({comments});
+  }
+
   render() {
     let formConditional
     const opts = {
@@ -134,6 +144,8 @@ class LinkForm extends React.Component {
                   videoId={this.state.youtube_ID}
                   onPause={this.getTimestamp}
                   onReady={this.onReady}
+                  isEditing={this.state.isEditing}
+                  isOwner={this.state.isOwner}
                   opts={opts}
                 />
                 </div>
@@ -153,24 +165,15 @@ class LinkForm extends React.Component {
           <div className={`right-side ${this.state.isCommenting ? '': 'hidden'} col-lg-5`}>
             {
               this.state.comments.map((comment, index) => (
-
-                  <div className='display-comment' key={index}>
-                    <button type='button' className='button timestamp-button' onClick={() => this.seekToTime(comment.timestamp)}>
-                      <div className="timestamp">
-                        <span className='at'>@</span><span className='parsedStamp'>{comment.parsedStamp}</span>
-                      </div>
-                      <span className='body'>{comment.body}</span>
-                    </button>
-                    <div className="edit-delete-buttons">
-                      <button type='button' className='icon-button' onClick={() => this.removeComment(index)}>
-                        <span className="iconify x-icon" data-icon="octicon-x" data-inline="false"></span>
-                      </button>
-                      <button type='button' className="icon-button">
-                        <span className="iconify gear-icon " data-icon="octicon:gear-24" data-inline="false"></span>
-                      </button>
-                    </div>
-                    {/* <button type='button' onClick={() => this.removeComment(index)}>Remove</button> */}
-                  </div>
+                <CommentDetail
+                updateComment={this.updateComment}
+                comment={comment}
+                isEditing={this.state.isEditing}
+                isOwner={this.state.isOwner}
+                index={index}
+                seekToTime={this.seekToTime}
+                removeComment={this.removeComment}
+                />
               ))
             }
             <form onSubmit={(event) => this.props.submitLink(event, this.state)}>
