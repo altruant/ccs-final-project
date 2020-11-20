@@ -142,11 +142,11 @@
   }
 
   .title-input {
-    width: 255px;
+    width: 100%;
   }
 
   .url-input {
-    width: 505px;
+    width: 100%;
   }
 
   .left-side {
